@@ -320,6 +320,13 @@
     return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
   }
 
+  function isTyping() {
+  const el = document.activeElement;
+  if (!el) return false;
+  const tag = el.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
+}
+
   bestEl.textContent = String(best).padStart(5, "0");
   applyTheme(0, true);
 
@@ -550,14 +557,15 @@
 
   // ---------- Input ----------
   window.addEventListener("keydown", (e) => {
+    if (isTyping()) return; // ignore if typing in input
+
     if (e.code === "Space") {
+      e.preventDefault();
       if (!started) {
-        e.preventDefault();
         setStoredName(getNameOrDefault());
         startGame();
         startJump(); // immediate first jump
       } else {
-        e.preventDefault();
         startJump();
       }
     } else if (e.code === "KeyR") {
@@ -567,6 +575,7 @@
   }, { passive:false });
 
   window.addEventListener("keyup", (e)=> {
+    if (isTyping()) return;
     if(e.code === "Space"){ endJump(); }
   });
 
