@@ -18,7 +18,6 @@
     --helmet: #1f2937;               /* player helmet */
     --jersey: #2563eb;               /* player jersey */
     --pants: #f59e0b;                /* player pants */
-    --skin: #fbbf24;                 /* accent */
   }
   *{box-sizing:border-box}
   html,body{height:100%}
@@ -41,26 +40,22 @@
 
   .main{display:grid;grid-template-columns: 1fr 220px; gap:10px}
 
-  /* Game screen + layered skies for crossfade */
+  /* Game screen (very simple background) */
   .screen{
     position:relative;height:var(--game-h);border-radius:16px;overflow:hidden;border:1px solid #334155;
-    background:#0000;
+    background:#0f172a;
   }
-  .sky{position:absolute;inset:0;transition:opacity 1800ms linear;opacity:0}
-  .sky.visible{opacity:1}
-
-  /* Stadium themes (0→9)
-     Day → Overcast → Late Afternoon → Dusk → Night → PrimeTime → Playoffs → Snow Game → Color Rush → Super Bowl Night */
-  .theme-0{background:linear-gradient(180deg,#a7f3d0 0%,#34d399 40%,#0ea5e9 100%);}          /* day */
-  .theme-1{background:linear-gradient(180deg,#cbd5e1 0%,#94a3b8 60%,#334155 100%);}          /* overcast */
-  .theme-2{background:linear-gradient(180deg,#fde68a 0%,#fb923c 45%,#ef4444 100%);}          /* late afternoon */
-  .theme-3{background:linear-gradient(180deg,#f472b6 0%,#a78bfa 45%,#312e81 100%);}          /* dusk */
-  .theme-4{background:linear-gradient(180deg,#1e293b 0%,#0f172a 60%,#000 100%);}             /* night */
-  .theme-5{background:radial-gradient(100% 90% at 50% 0%,#22d3ee 0%,#7c3aed 60%,#0f172a 100%);} /* primetime neon */
-  .theme-6{background:linear-gradient(180deg,#eab308 0%,#ef4444 50%,#1d4ed8 100%);}          /* playoffs drama */
-  .theme-7{background:linear-gradient(180deg,#e5e7eb 0%,#cbd5e1 40%,#64748b 100%);}          /* snow */
-  .theme-8{background:linear-gradient(180deg,#0ea5e9 0%,#a78bfa 35%,#ef4444 70%,#0f172a 100%);}/* color rush */
-  .theme-9{background:radial-gradient(80% 120% at 50% 10%,#7dd3fc22 0%,#312e81 50%,#111827 80%,#000 100%);}/* super bowl night */
+  /* Minimal, subtle background tint classes applied at milestones */
+  .bg-0{background:#0f172a}
+  .bg-1{background:#0e1724}
+  .bg-2{background:#0e1622}
+  .bg-3{background:#0d1520}
+  .bg-4{background:#0d141f}
+  .bg-5{background:#0c131d}
+  .bg-6{background:#0c121b}
+  .bg-7{background:#0b1119}
+  .bg-8{background:#0b1017}
+  .bg-9{background:#0a0f16}
 
   .hud{position:absolute;left:12px;top:10px;display:flex;gap:14px;font-variant-numeric:tabular-nums;z-index:6}
   .label{opacity:.95}
@@ -70,11 +65,10 @@
     background:repeating-linear-gradient(90deg,var(--turf) 0 24px,var(--turf-2) 24px 48px);
     box-shadow:0 -1px 0 #064e3b inset;z-index:6}
   .lane{position:absolute;left:0;right:0;bottom:calc(var(--ground-h));height:100%;pointer-events:none}
-  /* Yard hashes & sideline */
+  /* Yard hashes (toned down) */
   .lane:before{content:"";position:absolute;left:0;right:0;bottom:calc(var(--ground-h)+2px);height:100%;
-    background:repeating-linear-gradient(90deg,transparent 0 38px,var(--hash) 38px 40px,transparent 40px 78px,var(--hash) 78px 80px);
-    opacity:.22}
-  .lane:after{content:"";position:absolute;left:0;right:0;bottom:calc(var(--ground-h)+1px);height:4px;background:#93c5fd22}
+    background:repeating-linear-gradient(90deg,transparent 0 60px,var(--hash) 60px 62px);
+    opacity:.12}
 
   .player{--size:62px;position:absolute;left:48px;bottom:var(--ground-h);width:var(--size);height:var(--size);display:grid;place-items:center;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25));z-index:7}
   .sprite{width:100%;height:100%}
@@ -94,18 +88,13 @@
   .run .arm-b{transform-origin:5px 5px;animation:armB .22s linear infinite}
   .leg-a,.leg-b,.arm-a,.arm-b,.p-body{animation-play-state:paused}
 
-  /* Obstacles → tackling pads / defenders */
+  /* Obstacles → tackling pads */
   .obstacle{
     --w:20px;--h:44px;position:absolute;bottom:var(--ground-h);width:var(--w);height:var(--h);
     background:linear-gradient(180deg,var(--padding-red),#fb7185);border:1px solid var(--padding-dark);border-bottom-color:#7f1d1d;border-radius:6px 6px 4px 4px;
     box-shadow:0 3px 0 rgba(0,0,0,.25);will-change: transform; contain: content; z-index:7;
   }
   .obstacle:after{content:"";position:absolute;left:2px;right:2px;top:4px;height:6px;border-radius:3px;background:#0003}
-
-  /* Stadium lights (replaces clouds) */
-  .lights{position:absolute;top:10px;width:70px;height:22px;z-index:5;will-change: transform; contain: content}
-  .lights .mast{position:absolute;left:32px;top:0;width:6px;height:26px;background:#94a3b8;border-radius:2px}
-  .lights .bank{position:absolute;top:-4px;left:10px;width:50px;height:14px;background:#cbd5e166;border-radius:8px;box-shadow:0 0 12px #e5e7ebb3 inset,0 2px 4px rgba(0,0,0,.2)}
 
   .overlay{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(#0000,#0002);text-align:center;padding:24px;z-index:8}
   .card{background:#0b1220cc;border:1px solid #334155;border-radius:14px;padding:18px 20px;max-width:520px}
@@ -135,9 +124,7 @@
   </div>
 
   <div class="main">
-    <div class="screen" id="screen" role="region" aria-label="Gridiron Runner game area">
-      <div id="skyA" class="sky theme-0 visible" aria-hidden="true"></div>
-      <div id="skyB" class="sky theme-0" aria-hidden="true"></div>
+    <div class="screen bg-0" id="screen" role="region" aria-label="Gridiron Runner game area">
 
       <div class="hud">
         <div class="label">Yards: <span id="score">00000</span></div>
@@ -146,38 +133,38 @@
       </div>
 
       <div class="lane"></div>
-      <div id="lights"></div>
 
       <div class="player" id="player" aria-label="running back">
         <div class="sprite" id="sprite" aria-hidden="true">
-          <!-- Simple running back (SVG) -->
-          <svg viewBox="0 0 72 52" xmlns="http://www.w3.org/2000/svg">
+          <!-- Two-leg running back (SVG) -->
+          <svg viewBox="0 0 84 60" xmlns="http://www.w3.org/2000/svg">
             <g class="p-body">
               <!-- Helmet -->
-              <ellipse cx="48" cy="16" rx="10" ry="8" fill="var(--helmet)" stroke="#111827" stroke-width="1"/>
-              <rect x="51" y="15" width="6" height="4" rx="1" fill="#e5e7eb"/>
-              <!-- Jersey -->
-              <path d="M18,32 q8,-12 24,-10 q12,2 13,12 q1,10 -13,12 q-20,3 -24,-6 q-3,-6 0,-8 z" fill="var(--jersey)" stroke="#0b1220" stroke-width="1"/>
-              <!-- Ball tucked -->
-              <ellipse cx="42" cy="28" rx="6.5" ry="4" fill="#8b5a2b" stroke="#4b2e12" stroke-width=".8"/>
-              <path d="M36 28 h12" stroke="#fef3c7" stroke-width="1"/>
-              <!-- Legs -->
-              <g transform="translate(24,36)">
-                <g transform="translate(-2,0)">
-                  <rect class="leg-a" x="0" y="0" width="7" height="12" rx="3" fill="var(--pants)" stroke="#78350f" stroke-width=".8"/>
-                  <rect class="leg-b" x="10" y="0" width="7" height="12" rx="3" fill="var(--pants)" stroke="#78350f" stroke-width=".8"/>
-                </g>
-                <g transform="translate(18,0)">
-                  <rect class="leg-b" x="0" y="0" width="7" height="12" rx="3" fill="var(--pants)" stroke="#78350f" stroke-width=".8"/>
-                  <rect class="leg-a" x="10" y="0" width="7" height="12" rx="3" fill="var(--pants)" stroke="#78350f" stroke-width=".8"/>
-                </g>
+              <ellipse cx="56" cy="18" rx="11" ry="9" fill="var(--helmet)" stroke="#0b1220" stroke-width="1"/>
+              <rect x="59" y="17" width="7" height="4" rx="1" fill="#e5e7eb"/>
+
+              <!-- Torso/Jersey -->
+              <path d="M18,36 q10,-12 28,-10 q12,2 13,12 q1,10 -13,12 q-22,3 -28,-6 q-3,-5 0,-8 z" fill="var(--jersey)" stroke="#0b1220" stroke-width="1"/>
+
+              <!-- Football tucked to chest -->
+              <ellipse cx="44" cy="32" rx="7" ry="4.5" fill="#8b5a2b" stroke="#4b2e12" stroke-width=".9"/>
+              <path d="M38 32 h12" stroke="#fef3c7" stroke-width="1"/>
+
+              <!-- Arms (swinging) -->
+              <g transform="translate(28,28)">
+                <rect class="arm-a" x="-5" y="-2" width="9" height="10" rx="4" fill="#e5e7eb" stroke="#334155" stroke-width=".8"/>
               </g>
-              <!-- Arms -->
-              <g transform="translate(28,24)">
-                <rect class="arm-a" x="-4" y="-2" width="7" height="8" rx="3" fill="#e5e7eb" stroke="#334155" stroke-width=".8"/>
+              <g transform="translate(46,28)">
+                <rect class="arm-b" x="-2" y="-2" width="9" height="10" rx="4" fill="#e5e7eb" stroke="#334155" stroke-width=".8"/>
               </g>
-              <g transform="translate(42,24)">
-                <rect class="arm-b" x="-2" y="-2" width="7" height="8" rx="3" fill="#e5e7eb" stroke="#334155" stroke-width=".8"/>
+
+              <!-- LEGS (two clear legs) -->
+              <g transform="translate(26,42)">
+                <rect class="leg-a" x="0" y="0" width="9" height="14" rx="3" fill="var(--pants)" stroke="#78350f" stroke-width=".9"/>
+                <rect class="leg-b" x="16" y="0" width="9" height="14" rx="3" fill="var(--pants)" stroke="#78350f" stroke-width=".9"/>
+                <!-- shoes -->
+                <rect x="0" y="12.5" width="10" height="3" rx="1.5" fill="#111827"/>
+                <rect x="16" y="12.5" width="10" height="3" rx="1.5" fill="#111827"/>
               </g>
             </g>
           </svg>
@@ -189,7 +176,7 @@
       <!-- Start/help overlay -->
       <div class="overlay" id="help" aria-live="polite">
         <div class="card">
-          <h2>Hurdle pads, rack up yards 🏃‍♂️💨</h2>
+          <h2>Jump pads, gain yards 🏃‍♂️💨</h2>
           <p>
           Type your name, then press <span class="kbd">Space</span> to <strong>start</strong> and jump.<br>
           <strong>Hold</strong> Space for higher/long jumps, or tap for quick hops — jump height depends on how long you press.<br>
@@ -233,18 +220,12 @@
 
   let supa = null;
   window.addEventListener("load", () => {
-    try {
-      supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      fetchTop();
-    } catch (e) { console.warn("Supabase init failed", e); }
+    try { supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); fetchTop(); }
+    catch (e) { console.warn("Supabase init failed", e); }
   });
 
   // ---------- DOM ----------
   const screen = document.getElementById("screen");
-  const skyA = document.getElementById("skyA");
-  const skyB = document.getElementById("skyB");
-  let activeSky = "A";
-
   const playerEl = document.getElementById("player");
   const spriteEl = document.getElementById("sprite");
   const scoreEl  = document.getElementById("score");
@@ -262,23 +243,13 @@
   // ---------- Name persistence + sync ----------
   const getStoredName = () => localStorage.getItem("gridiron-name") || "Player";
   const setStoredName = (v) => localStorage.setItem("gridiron-name", (v || "Player").slice(0,12));
-  const getNameOrDefault = () => {
-    const v = (nameTop.value || nameStart.value || "").trim();
-    return v || "Player";
-  };
+  const getNameOrDefault = () => { const v = (nameTop?.value || nameStart?.value || "").trim(); return v || "Player"; };
 
   const initialName = getStoredName();
-  nameTop.value = initialName;
-  nameStart.value = initialName;
-
-  nameTop.addEventListener("input", () => {
-    nameStart.value = nameTop.value.slice(0,12);
-    setStoredName(nameTop.value);
-  });
-  nameStart.addEventListener("input", () => {
-    nameTop.value = nameStart.value.slice(0,12);
-    setStoredName(nameStart.value);
-  });
+  if (nameTop) nameTop.value = initialName;
+  if (nameStart) nameStart.value = initialName;
+  nameTop?.addEventListener("input", () => { if(nameStart){ nameStart.value = nameTop.value.slice(0,12); } setStoredName(nameTop.value); });
+  nameStart?.addEventListener("input", () => { if(nameTop){ nameTop.value = nameStart.value.slice(0,12); } setStoredName(nameStart.value); });
 
   // ---------- Game constants ----------
   const GROUND = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--ground-h"));
@@ -289,8 +260,8 @@
   const BASE_SPEED = 380;       // px/s
   const MAX_SCALE = 2.6;        // speed cap
 
-  // Background milestones (10 stages including 0)
-  const BG_THRESHOLDS = [0, 50, 150, 300, 600, 1000, 1600, 2300, 3200, 4500]; // treat score as yards
+  // Milestones (simple tints only)
+  const BG_THRESHOLDS = [500,1500,3000,4500,6000,7500,9000,11000,13000,15000];
   let currentTheme = 0;
 
   // ---------- State ----------
@@ -299,48 +270,24 @@
   let jumpStartAt = 0;
   let holdLatchUntil = 0;
   let obstacles = []; // {el,x,w,h}
-  let lights = [];    // {el,x,v}
   let running = false;
   let started = false;
   let tPrev = 0;
-  let tick = 0;
   let score = 0;      // yards
   let best = parseInt(localStorage.getItem("gridiron-best") || "0", 10);
   let speedScale = 1;
   let spawnTimerMs = 0;
 
-  // Drift state for heavy-tailed randomness
-  let driftMu = 0;
-  let driftSigma = 0;
+  // Heavy-tailed randomness drift
+  let driftMu = 0, driftSigma = 0;
+  function randn(){ let u=0,v=0; while(u===0)u=Math.random(); while(v===0)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
 
-  function randn(){
-    let u=0, v=0; while (u===0) u=Math.random(); while (v===0) v=Math.random();
-    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
-  }
-
-  function isTyping(){
-    const el = document.activeElement; if(!el) return false; const tag = el.tagName;
-    return tag==='INPUT' || tag==='TEXTAREA' || el.isContentEditable;
-  }
+  function isTyping(){ const el=document.activeElement; if(!el) return false; const tag=el.tagName; return tag==='INPUT'||tag==='TEXTAREA'||el.isContentEditable; }
 
   bestEl.textContent = String(best).padStart(5, "0");
   applyTheme(0, true);
 
   const setTransformX = (el, x) => { el.style.transform = `translate3d(${x}px,0,0)`; };
-
-  // ---------- Stadium lights ----------
-  function ensureLights(){ while(lights.length < 4) addLight(true); }
-  function addLight(init=false){
-    const el = document.createElement("div");
-    el.className = "lights";
-    el.innerHTML = '<div class="mast"></div><div class="bank"></div>';
-    const top = 10 + Math.random()*80;
-    const x = init ? screen.clientWidth*Math.random() : screen.clientWidth + Math.random()*120;
-    el.style.top = top + "px";
-    screen.appendChild(el);
-    const c = { el, x, v: 26 + Math.random()*36 };
-    setTransformX(el, x); lights.push(c);
-  }
 
   // ---------- Obstacles ----------
   function addObstacle(){
@@ -384,19 +331,12 @@
   function loop(ts){
     try{
       if(!running) return; if(!tPrev) tPrev = ts; const dt = Math.min(50, ts - tPrev); const dtSec = dt/1000; tPrev = ts;
-      tick++;
 
       // Speed ramp
       speedScale = Math.min(MAX_SCALE, 1 + 1.35 * (1 - Math.exp(-score / 4500)));
       speedEl.textContent = speedScale.toFixed(2) + "x";
 
-      // Lights move
-      for(let i=lights.length-1;i>=0;i--){
-        const c = lights[i]; c.x -= c.v * dtSec * (0.7 + 0.6*(speedScale-1)); setTransformX(c.el, c.x);
-        if(c.x < -90){ c.el.remove(); lights.splice(i,1); addLight(false); }
-      }
-
-      // ----- Spawns -----
+      // Spawns
       if (spawnTimerMs <= 0) {
         addObstacle();
         const worldPxPerSec = BASE_SPEED * Math.max(1, speedScale);
@@ -415,10 +355,10 @@
       spawnTimerMs -= dt; if (!Number.isFinite(spawnTimerMs)) spawnTimerMs = 300; if (spawnTimerMs < -300) spawnTimerMs = -300; if (obstacles.length === 0 && spawnTimerMs > 1200) spawnTimerMs = 120;
 
       // Move obstacles & collisions
-      const px = BASE_SPEED * speedScale * dtSec;
+      const px = BASE_SPEED * speedScale * (dt/1000);
       const runnerRect = deflateRect(playerEl.getBoundingClientRect(), P_PAD);
       for(let i=obstacles.length-1;i>=0;i--){
-        const o = obstacles[i]; o.x -= px; setTransformX(o.el, o.x);
+        const o = obstacles[i]; o.x = (o.x ?? screen.clientWidth) - px; setTransformX(o.el, o.x);
         const r = deflateRect(o.el.getBoundingClientRect(), O_PAD);
         if(overlap(runnerRect, r)){ endGame(); break; }
         if(o.x < -o.w - 12){ o.el.remove(); obstacles.splice(i,1); }
@@ -428,7 +368,7 @@
       let ay = -GRAVITY;
       const now = performance.now();
       if ((jumpPressed || now < holdLatchUntil) && (now - jumpStartAt) < JUMP_HOLD_MS && runner.vy > 0) { ay += JUMP_HOLD_BOOST; }
-      runner.vy += ay * dtSec; runner.y = Math.max(GROUND, runner.y + runner.vy * dtSec);
+      runner.vy += ay * (dt/1000); runner.y = Math.max(GROUND, runner.y + runner.vy * (dt/1000));
       if(runner.y === GROUND){ runner.vy = 0; runner.jumps = 0; spriteEl.classList.add("run"); } else { spriteEl.classList.remove("run"); }
       playerEl.style.bottom = runner.y + "px";
 
@@ -445,25 +385,29 @@
   // ---------- Lifecycle ----------
   function start(){
     obstacles.forEach(o=>o.el.remove()); obstacles=[];
-    lights.forEach(c=>c.el.remove()); lights=[];
-    score=0; tick=0; speedScale=1; spawnTimerMs=300; driftMu=0; driftSigma=0;
+    score=0; speedScale=1; spawnTimerMs=300; driftMu=0; driftSigma=0; tPrev=0;
     runner = { y: GROUND, vy: 0, jumps: 0, alive: true };
     playerEl.style.bottom = GROUND + "px"; playerEl.classList.remove("dead"); spriteEl.classList.remove("run");
-    ensureLights(); applyTheme(0, true);
+    applyTheme(0, true);
     running = true; requestAnimationFrame(loop);
   }
-  function endGame(){ running = false; runner.alive = false; playerEl.classList.add("dead"); document.getElementById("finalScore").textContent = String(score); overEl.style.display=""; submitScore(getNameOrDefault(), score).catch(()=>{}); }
-  function restart(){ overEl.style.display="none"; tPrev=0; start(); }
+  function endGame(){ running = false; runner.alive = false; playerEl.classList.add("dead"); document.getElementById("finalScore").textContent = String(score); document.getElementById("gameover").style.display=""; submitScore(getNameOrDefault(), score).catch(()=>{}); }
+  function restart(){ document.getElementById("gameover").style.display="none"; tPrev=0; start(); }
 
   // ---------- Input ----------
   window.addEventListener("keydown", (e) => {
-    if (isTyping()) return; if (e.code === "Space") { e.preventDefault(); if (!started) { setStoredName(getNameOrDefault()); startGame(); startJump(); } else { startJump(); } } else if (e.code === "KeyR") { e.preventDefault(); restart(); }
+    if (isTyping()) return;
+    if (e.code === "Space") {
+      e.preventDefault();
+      if (!started) { setStoredName(getNameOrDefault()); started = true; helpEl.style.display = "none"; start(); }
+      startJump();
+    } else if (e.code === "KeyR") { e.preventDefault(); started = true; restart(); }
   }, { passive:false });
   window.addEventListener("keyup", (e)=> { if (isTyping()) return; if(e.code === "Space"){ endJump(); } });
-  screen.addEventListener("pointerdown", () => { if (started) startJump(); }, { passive:true });
+  document.getElementById("screen").addEventListener("pointerdown", () => { if (started) startJump(); }, { passive:true });
   window.addEventListener("pointerup", () => endJump(), { passive:true });
-  restartBtn.addEventListener("click", () => { started=true; restart(); });
-  if (againBtn) againBtn.addEventListener("click", () => { started=true; restart(); });
+  restartBtn?.addEventListener("click", () => { started=true; restart(); });
+  againBtn?.addEventListener("click", () => { started=true; restart(); });
 
   // ---------- Leaderboard ----------
   async function submitScore(name, score){
@@ -477,9 +421,17 @@
   function renderTop(rows){ if(!rows.length){ topList.innerHTML = "<li>No scores yet — be first!</li>"; return; } topList.innerHTML = rows.map((r)=>(`<li><strong>${escapeHtml(r.name||"Player")}</strong> — ${r.score}</li>`)).join(""); }
   function escapeHtml(s){ return s.replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-  // ---------- Background crossfade ----------
-  function updateBackground(scoreVal){ let idx = 0; for (let i = BG_THRESHOLDS.length - 1; i >= 0; i--) { if (scoreVal >= BG_THRESHOLDS[i]) { idx = i; break; } } if (idx !== currentTheme){ applyTheme(idx); } }
-  function applyTheme(idx, immediate=false){ currentTheme = idx; const showEl = (activeSky === "A") ? skyB : skyA; const hideEl = (activeSky === "A") ? skyA : skyB; showEl.className = `sky theme-${idx}` + (immediate ? " visible" : ""); if (immediate){ hideEl.classList.remove("visible"); activeSky = (activeSky === "A") ? "B" : "A"; return; } void showEl.offsetWidth; hideEl.classList.remove("visible"); showEl.classList.add("visible"); activeSky = (activeSky === "A") ? "B" : "A"; }
+  // ---------- Background tint update ----------
+  function updateBackground(scoreVal){
+    let idx = 0;
+    for (let i = BG_THRESHOLDS.length - 1; i >= 0; i--) { if (scoreVal >= BG_THRESHOLDS[i]) { idx = i+1; break; } }
+    if (idx !== currentTheme){ applyTheme(idx); }
+  }
+  function applyTheme(idx, immediate=false){
+    currentTheme = idx;
+    for(let i=0;i<=9;i++){ screen.classList.remove(`bg-${i}`); }
+    screen.classList.add(`bg-${Math.min(idx,9)}`);
+  }
 })();
 </script>
 </body>
