@@ -186,6 +186,9 @@
             <label for="startName">Name</label>
             <input id="startName" class="input" maxlength="12" placeholder="Player" />
           </div>
+          <div class="startRow" style="justify-content:center;gap:10px;margin-top:10px">
+            <button id="startBtn" class="btn">Start</button>
+          </div>
         </div>
       </div>
 
@@ -235,6 +238,7 @@
   const helpEl   = document.getElementById("help");
   const restartBtn = document.getElementById("restartBtn");
   const againBtn = document.getElementById("againBtn");
+  const startBtn = document.getElementById("startBtn");
 
   const nameTop = document.getElementById("playerName");
   const nameStart = document.getElementById("startName");
@@ -399,7 +403,7 @@
     if (isTyping()) return;
     if (e.code === "Space") {
       e.preventDefault();
-      if (!started) { setStoredName(getNameOrDefault()); started = true; helpEl.style.display = "none"; start(); }
+      if (!started) return; // only start via Start button
       startJump();
     } else if (e.code === "KeyR") { e.preventDefault(); started = true; restart(); }
   }, { passive:false });
@@ -408,6 +412,12 @@
   window.addEventListener("pointerup", () => endJump(), { passive:true });
   restartBtn?.addEventListener("click", () => { started=true; restart(); });
   againBtn?.addEventListener("click", () => { started=true; restart(); });
+  startBtn?.addEventListener("click", () => {
+    started = true;
+    setStoredName(getNameOrDefault());
+    helpEl.style.display = "none";
+    start();
+  });
 
   // ---------- Leaderboard ----------
   async function submitScore(name, score){
